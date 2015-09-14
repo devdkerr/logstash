@@ -1,0 +1,31 @@
+  set daemon 120
+
+  set logfile /var/log/monit.log
+
+  set idfile /var/lib/monit/id
+
+  set statefile /var/lib/monit/state
+
+  set eventqueue
+      basedir /var/lib/monit/events
+      slots 100
+
+  set httpd port 2812
+      allow 0.0.0.0/0.0.0.0
+      allow logstash:logstash
+
+  check system logstash
+      if loadavg (1min) > 4 then alert
+      if loadavg (5min) > 2 then alert
+      if memory usage > 75% then alert
+      if swap usage > 25% then alert
+      if cpu usage (user) > 70% then alert
+      if cpu usage (system) > 30% then alert
+      if cpu usage (wait) > 20% then alert
+
+  check process logstash matching "logstash/runner.rb agent"
+      if cpu > 50% for 2 cycles then alert
+      if totalmem > 200.0 MB for 5 cycles then alert
+      if loadavg(5min) greater than 10 for 8 cycles then alert
+
+  include /etc/monit/conf.d/*
