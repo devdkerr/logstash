@@ -10,7 +10,6 @@ RUN apt-get update \
  && apt-get clean \
  && rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
-COPY logstash.conf /etc/logstash/conf.d/logstash.conf
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64/jre
 
 COPY monitrc /etc/monit/monitrc
